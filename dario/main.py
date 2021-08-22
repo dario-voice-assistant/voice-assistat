@@ -11,10 +11,13 @@ def dario_speek(audio):
     test.runAndWait()
 
 
-
+def search():
+    search=record_audio('what do you want to search for')
+    url = f'https://google.com/search?q={search}'
+    webbrowser.get().open(url)
+    dario_speek(f'this is what I found about {search}')
 
 def start():
-    dario_speek("This is dario ai assistant")
    
     hour = datetime.datetime.now().hour
     if hour >= 6 and hour < 12:
@@ -30,7 +33,7 @@ def start():
 
 def record_audio(ask=False):
     if ask:
-        print(ask)  
+        dario_speek(ask)  
     s=am.Record(4)
     s.Write('some_file.wav')  
     with sr.AudioFile('some_file.wav') as source:
@@ -39,7 +42,7 @@ def record_audio(ask=False):
        
         voice_data=''
         try:
-            voice_data = r.recognize_google(audio)
+            voice_data = r.recognize_google(audio, language='en-in')
         except sr.UnknownValueError:
             print('sorry: I did not get that ')
         except sr.RequestError:
@@ -47,8 +50,13 @@ def record_audio(ask=False):
         return voice_data
 
 def respond(audio):
-    if 'what is your name' or 'name' in audio:
+    if ('what is your name' or 'name') in audio:
         dario_speek('my name is dario')
+    if 'search' in audio:
+        search()
+    if ('stop'or 'exit' or'sleep')in audio:
+        dario_speek('nice to meet you' )
+        exit()
  
 
 
