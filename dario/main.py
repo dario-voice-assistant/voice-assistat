@@ -55,13 +55,17 @@ def respond(audio):
         dario_speek('my name is dario')
     if 'search' in audio:
         search()
-    if 'send email' or 'email' in audio:
-        sender(audio)
-    if ('stop'or 'exit' or'sleep')in audio:
-        dario_speek('nice to meet you' )
+    if ('send email' or 'email') in audio:
+        sender()
+    if ('stop' or 'exit' or 'sleep' or 'exit' or 'goodbye') in audio:
+        dario_speek('nice to meet you')
         exit()
+    if ('date' or 'what is the date') in audio:
+        get_date()
+    if ('time' or 'what is the time') in audio:
+        get_time()
  
-def sender(audio):
+def sender():
     try:
         dario_speek("yes sir, what should I say?")
         content = record_audio()
@@ -83,6 +87,22 @@ def send_email(to, content):
     email_server.sendmail(gmail_user,to,content)
     email_server.quit()
 
+def get_date():
+    year = int(datetime.datetime.now().year)
+    month_num = str(datetime.datetime.now().month)
+    datetime_object = datetime.datetime.strptime(month_num, "%m")
+    full_month_name = datetime_object.strftime("%B")
+    day = int(datetime.datetime.now().day)
+    dario_speek("The current date is")
+    dario_speek(day)
+    dario_speek(full_month_name)
+    dario_speek(year)
+
+def get_time():
+    now = datetime.datetime.now()
+    current_time= now.strftime("%I:%M %p")
+    dario_speek('The current time is')
+    dario_speek(current_time)
 
 start()
 while True:
