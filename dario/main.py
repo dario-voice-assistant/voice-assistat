@@ -4,6 +4,7 @@ import webbrowser
 import pyttsx3 
 import datetime
 import smtplib
+import requests
 r = sr.Recognizer()
 
 test=pyttsx3.init()
@@ -72,6 +73,8 @@ def respond(audio):
         get_time()
     if 'location' in audio:
         location()
+    if 'weather' in audio:
+        get_weather(audio)
 
  
 def sender():
@@ -112,6 +115,18 @@ def get_time():
     current_time= now.strftime("%I:%M %p")
     dario_speek('The current time is')
     dario_speek(current_time)
+
+def get_weather(audio):
+
+    temp = record_audio("what is the city name")
+    city_name = temp.lower()
+    api_key = "39577f16323c466893c05341fcc378c6"
+    # temp_url = f"https://api.weatherbit.io/v2.0/forecast/daily?city=amman&key={api_key}"
+    temp_url = f"https://api.weatherbit.io/v2.0/forecast/daily?city={city_name}&key={api_key}"
+    responses = requests.get(temp_url)
+    data = responses.json()
+    temp = data["data"][0]["high_temp"]
+    dario_speek(f" the temperature in {city_name} is {temp} ")
 
 start()
 while True:
