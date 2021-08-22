@@ -18,6 +18,12 @@ def search():
     webbrowser.get().open(url)
     dario_speek(f'this is what I found about {search}')
 
+def location():
+    location = record_audio('what is the location that you want e to search for ??')
+    url = f'https://google.nl/maps/place/{location}/&amp;'
+    webbrowser.get().open(url)
+
+
 def start():
    
     hour = datetime.datetime.now().hour
@@ -64,6 +70,9 @@ def respond(audio):
         get_date()
     if ('time' or 'what is the time') in audio:
         get_time()
+    if 'location' in audio:
+        location()
+
  
 def sender():
     try:
@@ -108,3 +117,4 @@ start()
 while True:
     voice_data=record_audio()
     respond(voice_data)
+
