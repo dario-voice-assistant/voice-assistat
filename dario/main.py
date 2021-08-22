@@ -3,6 +3,7 @@ import audiomath as am
 import webbrowser
 import pyttsx3 
 import datetime
+import smtplib
 r = sr.Recognizer()
 
 test=pyttsx3.init()
@@ -54,12 +55,33 @@ def respond(audio):
         dario_speek('my name is dario')
     if 'search' in audio:
         search()
+    if 'send email' or 'email' in audio:
+        sender(audio)
     if ('stop'or 'exit' or'sleep')in audio:
         dario_speek('nice to meet you' )
         exit()
  
+def sender(audio):
+    try:
+        dario_speek("yes sir, what should I say?")
+        content = record_audio()
+        to = {'awonkhrais@gmail.com'}
+        send_email(to, content)
+        dario_speek("Email has been sent sir!")
 
+    except Exception as e:
+        print(e)
+        dario_speek("Unable to send the email")
 
+def send_email(to, content):
+    email_server = smtplib.SMTP('smtp.gmail.com',587)
+    email_server.ehlo()
+    email_server.starttls()
+    gmail_user = 'dariovapy@gmail.com'
+    gmail_password = 'dariova123'
+    email_server.login(gmail_user,gmail_password)
+    email_server.sendmail(gmail_user,to,content)
+    email_server.quit()
 
 
 start()
