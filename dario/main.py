@@ -24,6 +24,33 @@ def location():
     url = f'https://google.nl/maps/place/{location}/&amp;'
     webbrowser.get().open(url)
 
+def python():
+    temp=record_audio('what would you want me to search for')
+    if ('for'or 'loops')in temp:
+        url='https://www.w3schools.com/python/python_for_loops.asp'
+        webbrowser.get().open(url)
+    if ('function')in temp:
+        url='https://www.w3schools.com/python/python_functions.asp'
+        webbrowser.get().open(url)
+    if ('variables')in temp:
+        url='https://www.w3schools.com/python/python_variables.asp'
+        webbrowser.get().open(url)
+    if ('data'and'types')in temp:
+        url='https://www.w3schools.com/python/python_datatypes.asp'
+        webbrowser.get().open(url)
+    if ('operators')in temp:
+        url='https://www.w3schools.com/python/python_operators.asp'
+        webbrowser.get().open(url)
+    if ('classes'or'objects')in temp:
+        url='https://www.w3schools.com/python/python_classes.asp'
+        webbrowser.get().open(url)
+    if ('list'or'lists')in temp:
+        url='https://www.w3schools.com/python/python_lists.asp'
+        webbrowser.get().open(url)
+    if ('if'or'else' or 'conditions')in temp:
+        url='https://www.w3schools.com/python/python_conditions.asp'
+        webbrowser.get().open(url)
+
 
 def start():
    
@@ -75,6 +102,8 @@ def respond(audio):
         location()
     if 'weather' in audio:
         get_weather(audio)
+    if 'python' in audio:
+        python()
 
  
 def sender():
