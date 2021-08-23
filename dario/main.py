@@ -5,6 +5,7 @@ import pyttsx3
 import datetime
 import smtplib
 import requests
+import os
 r = sr.Recognizer()
 
 test=pyttsx3.init()
@@ -104,6 +105,10 @@ def respond(audio):
         get_weather(audio)
     if 'python' in audio:
         python()
+    if "play music" in voice_data:
+        song_path = 'D:\\Music'
+        songs = os.listdir(song_path)
+        os.startfile(os.path.join(song_path, songs[0]))
 
  
 def sender():
