@@ -6,6 +6,23 @@ import datetime
 import smtplib
 import requests
 import os
+import tkinter as tk
+from tkinter import *
+from PIL import Image,ImageTk
+root = tk.Tk()
+canvas = tk.Canvas(root,width = 600 , height = 400)
+canvas.grid(columnspan = 3)
+
+#logo
+root.iconbitmap('../logo.ico')
+
+logo = Image.open('../mic.gif')
+logo = ImageTk.PhotoImage(logo)
+logo_label = tk.Label(image = logo)
+logo_label.image = logo
+logo_label.grid(column=1,row=0)
+root.title('Dario Voice Assistant ')
+
 r = sr.Recognizer()
 
 test=pyttsx3.init()
@@ -53,6 +70,7 @@ def python():
         webbrowser.get().open(url)
 
 
+
 def start():
    
     hour = datetime.datetime.now().hour
@@ -66,6 +84,9 @@ def start():
         dario_speek("Good night sir")
 
     dario_speek("Dario at your service please tell me how can I help you?")
+    root.after(1000, respond)
+
+
 
 def record_audio(ask=False):
     if ask:
@@ -85,7 +106,9 @@ def record_audio(ask=False):
             print('sorry: my speech service is down')
         return voice_data
 
-def respond(audio):
+def respond():
+    audio = record_audio()
+
     if ('what is your name' or 'name') in audio:
         dario_speek('my name is dario')
     if 'search' in audio:
@@ -162,8 +185,56 @@ def get_weather(audio):
     temp = data["data"][0]["high_temp"]
     dario_speek(f" the temperature in {city_name} is {temp} ")
 
-start()
-while True:
-    voice_data=record_audio()
-    respond(voice_data)
+def on_start():
+   global running
+   running = True
+
+def on_stop():
+    dario_speek("Good Bye sir! nice to meet you")
+    global running
+    running = False
+    root.destroy()
+
+
+def open_window():
+    feature_window = Toplevel(root)
+    feature_window.title("Dario features")
+    feature_window.geometry("550x300")
+    Label(feature_window,text="Dario is here to help you, he can do many services:", height = 3,  width = 500, font = "Raleway" , bg = '#724bf2').pack(pady = 10)
+    Lb = Listbox(feature_window ,height = 200,width = 500,  bg = '#724bf2', font = "Raleway" )
+    Lb.insert(1, "1.")
+    Lb.insert(2, "2.")
+    Lb.insert(3, "3.")
+    Lb.insert(4, "4.")
+    Lb.insert(5, "5.")
+    Lb.insert(6, "6.")
+    Lb.insert(7, "7.")
+    Lb.pack()
+    feature_window.mainloop()
+
+
+
+start_talk = tk.Button(height=1, width=10, text="Let's Talk ", command=start, bg='#724bf2', fg='white')
+start_talk.config(font=("Raleway", 12))
+start_talk.place(x=350, y=520)
+
+
+my_features = tk.Button(height=1, width=11, text="My Features ", command=open_window, bg='#724bf2', fg='white')
+my_features.config(font=("Raleway", 12))
+my_features.place(x=550, y=520)
+
+good_bye = tk.Button(height=1, width=10, text="Good Bye", command=on_stop, bg='#724bf2', fg='white')
+good_bye.config(font=("Raleway", 12))
+good_bye.place(x=150, y=520)
+
+
+
+
+root.mainloop()
+
+
+# start()
+# while True:
+#     voice_data=record_audio()
+#     respond(voice_data)
 
