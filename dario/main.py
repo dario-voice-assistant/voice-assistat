@@ -4,6 +4,8 @@ import webbrowser
 import pyttsx3 
 import datetime
 import smtplib
+import requests
+import os
 r = sr.Recognizer()
 
 test=pyttsx3.init()
@@ -17,6 +19,39 @@ def search():
     url = f'https://google.com/search?q={search}'
     webbrowser.get().open(url)
     dario_speek(f'this is what I found about {search}')
+
+def location():
+    location = record_audio('what is the location that you want e to search for ??')
+    url = f'https://google.nl/maps/place/{location}/&amp;'
+    webbrowser.get().open(url)
+
+def python():
+    temp=record_audio('what would you want me to search for')
+    if ('for'or 'loops')in temp:
+        url='https://www.w3schools.com/python/python_for_loops.asp'
+        webbrowser.get().open(url)
+    if ('function')in temp:
+        url='https://www.w3schools.com/python/python_functions.asp'
+        webbrowser.get().open(url)
+    if ('variables')in temp:
+        url='https://www.w3schools.com/python/python_variables.asp'
+        webbrowser.get().open(url)
+    if ('data'and'types')in temp:
+        url='https://www.w3schools.com/python/python_datatypes.asp'
+        webbrowser.get().open(url)
+    if ('operators')in temp:
+        url='https://www.w3schools.com/python/python_operators.asp'
+        webbrowser.get().open(url)
+    if ('classes'or'objects')in temp:
+        url='https://www.w3schools.com/python/python_classes.asp'
+        webbrowser.get().open(url)
+    if ('list'or'lists')in temp:
+        url='https://www.w3schools.com/python/python_lists.asp'
+        webbrowser.get().open(url)
+    if ('if'or'else' or 'conditions')in temp:
+        url='https://www.w3schools.com/python/python_conditions.asp'
+        webbrowser.get().open(url)
+
 
 def start():
    
@@ -64,6 +99,17 @@ def respond(audio):
         get_date()
     if ('time' or 'what is the time') in audio:
         get_time()
+    if 'location' in audio:
+        location()
+    if 'weather' in audio:
+        get_weather(audio)
+    if 'python' in audio:
+        python()
+    if "play music" in voice_data:
+        song_path = 'D:\\Music'
+        songs = os.listdir(song_path)
+        os.startfile(os.path.join(song_path, songs[0]))
+
  
 def sender():
     try:
@@ -103,6 +149,18 @@ def get_time():
     current_time= now.strftime("%I:%M %p")
     dario_speek('The current time is')
     dario_speek(current_time)
+
+def get_weather(audio):
+
+    temp = record_audio("what is the city name")
+    city_name = temp.lower()
+    api_key = "39577f16323c466893c05341fcc378c6"
+    # temp_url = f"https://api.weatherbit.io/v2.0/forecast/daily?city=amman&key={api_key}"
+    temp_url = f"https://api.weatherbit.io/v2.0/forecast/daily?city={city_name}&key={api_key}"
+    responses = requests.get(temp_url)
+    data = responses.json()
+    temp = data["data"][0]["high_temp"]
+    dario_speek(f" the temperature in {city_name} is {temp} ")
 
 start()
 while True:
