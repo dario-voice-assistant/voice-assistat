@@ -6,6 +6,8 @@ import datetime
 import smtplib
 import requests
 import os
+from tkinter import *
+
 r = sr.Recognizer()
 
 test=pyttsx3.init()
@@ -162,8 +164,34 @@ def get_weather(audio):
     temp = data["data"][0]["high_temp"]
     dario_speek(f" the temperature in {city_name} is {temp} ")
 
-start()
-while True:
-    voice_data=record_audio()
-    respond(voice_data)
+# start()
+# while True:
+#     voice_data=record_audio()
+#     respond(voice_data)
 
+def application_GUI():
+    root = Tk()
+    root.geometry("350x275")
+    root.title("Dario Voice Assistant")
+    root.columnconfigure(0, weight=1)
+    root.columnconfigure(1, weight=1)
+    root.columnconfigure(2, weight=1)
+    root.rowconfigure(0, weight=1)
+    root.rowconfigure(1, weight=1)
+    root.rowconfigure(2, weight=1)
+    root.rowconfigure(3, weight=1)
+
+    # Creating buttons
+    button1 = Button(root, text='Exit', command=root.quit)
+    button2 = Button(root, text='Hello')
+    button3 = Button(root, text='Hello')
+
+    # Placing buttons on grid
+    button1.grid(row=3, column=0)
+    button2.grid(row=3, column=1)
+    button3.grid(row=3, column=2)
+
+
+    root.mainloop()
+
+application_GUI()
