@@ -7,6 +7,8 @@ import smtplib
 import requests
 import os
 from tkinter import *
+import glob
+from PIL import Image, ImageDraw
 
 r = sr.Recognizer()
 
@@ -178,22 +180,38 @@ def button_talker():
         voice_data = record_audio()
         respond(voice_data)
 
+def features():
+    feature = Toplevel()
+    feature.title("Dario features")
+    feature.geometry("400x400")
+    Label(feature, text="Dario can do many services :", height=3, width=300,
+          font="Raleway", bg='black', fg='white').pack(pady=5)
+    Lb = Listbox(feature, height=50, width=250, bg='black', fg='white', font="Raleway")
+    Lb.insert(1, "1. Time Feature")
+    Lb.insert(2, "2. Date Feature")
+    Lb.insert(3, "3. Weather Feature")
+    Lb.insert(4, "4. Location Feature")
+    Lb.insert(5, "5. Send Email Feature")
+    Lb.insert(6, "6. Search Feature")
+    Lb.insert(7, "7. Play Music Feature")
+    Lb.insert(8, "8. Python Feature")
+    Lb.insert(9, "9. Exit, Stop Feature")
+    Lb.pack()
 
 def application_GUI():
     root = Tk()
-
-
     root.title("Dario Voice Assistant")
 
     root.config(bg='yellow')
-    img = PhotoImage(file="particles-2-gifffy.gif", format='gif')
+    img = PhotoImage(file="GIF.gif", format='gif')
     label = Label(
         root,
         image=img
     )
     # sdfsdfsdffsfsfdfd
     label.place(x=0, y=0, relwidth=1.1, relheight=1.1)
-    root.geometry("700x500")
+
+    root.geometry("400x250")
     root.columnconfigure(0, weight=1)
     root.columnconfigure(1, weight=1)
     root.columnconfigure(2, weight=1)
@@ -205,7 +223,7 @@ def application_GUI():
 
     button1 = Button(root, text='Exit', command=root.quit, height=1, width=10, bg='#001E6C', fg='#F9F9F9')
     button2 = Button(root, text="Let's Talk", command=button_talker, height=1, width=10, bg='#001E6C', fg='#F9F9F9')
-    button3 = Button(root, text='Features', height=1, width=10, bg='#001E6C', fg='#F9F9F9')
+    button3 = Button(root, text='Features', command=features, height=1, width=10, bg='#001E6C', fg='#F9F9F9')
     # button3.config(bg='white')
 
     button1.grid(row=3, column=0)
