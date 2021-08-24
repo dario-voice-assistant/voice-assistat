@@ -8,7 +8,8 @@ import requests
 import urllib.request
 import re
 import os
-import wikipedia
+import pyjokes
+
 import tkinter as tk
 from tkinter import *
 from PIL import Image,ImageTk
@@ -18,6 +19,7 @@ root = tk.Tk()
 r = sr.Recognizer()
 
 test=pyttsx3.init()
+
 def dario_speek(audio):
     test.say(audio)
     test.runAndWait()
@@ -86,7 +88,9 @@ def start():
             dario_speek("Good night sir")
 
         dario_speek("Dario at your service please tell me how can I help you?")
+  
     counter +=1
+    
     root.after(1000, respond)
 
 
@@ -104,14 +108,21 @@ def record_audio(ask=False):
         try:
             voice_data = r.recognize_google(audio, language='en-in')
         except sr.UnknownValueError:
-            print('sorry: I did not get that ')
+            dario_speek('sorry, I did not get that, please repeat')
+            voice_data=record_audio()
         except sr.RequestError:
-            print('sorry: my speech service is down')
+            dario_speek('sorry, my speech service is down')
         return voice_data
 
-def respond():
-    audio = record_audio()
+trying=0
 
+def respond():
+    global trying
+    if trying>0:
+        dario_speek('anything else')
+    trying+=1
+    audio = record_audio()
+    
     if ('what is your name' or 'name') in audio:
         dario_speek('my name is dario')
         root.after(1000, respond)
@@ -120,13 +131,14 @@ def respond():
         search()
         root.after(1000, respond)
 
-    if ('send email' or 'email') in audio:
+    if ('send' or 'email') in audio:
         sender()
         root.after(1000, respond)
 
-    if ('stop' or 'exit' or 'sleep' or 'goodbye') in audio:
+    if ('stop' or 'exit' or 'sleep' or 'goodbye' or 'no') in audio:
         dario_speek('nice to meet you')
         exit()
+
     if ('date' or 'what is the date') in audio:
         get_date()
         root.after(1000, respond)
@@ -143,7 +155,7 @@ def respond():
         get_weather(audio)
         root.after(1000, respond)
 
-    if 'python' in audio:
+    if ('python'or'advise') in audio:
         python()
         root.after(1000, respond)
 
@@ -151,28 +163,30 @@ def respond():
         search_youtube()
         root.after(1000, respond)
 
-    if 'information' in audio:
-        wiki(audio)
+    if 'joke' in audio:
+        joke()
         root.after(1000, respond)
 
 
-def wiki(audio):
-    dario_speek('Searching...')
-    audio = audio.replace('wikipedia', '')
-    result = wikipedia.summary(audio, sentences=2)
-    print(result)
-    dario_speek(result)
+def joke():
+    joke1=pyjokes.get_joke(language='en', category= 'all')
+    dario_speek(joke1)
+    dario_speek('ha ha ha ha ha ha ha ha ha ')
 
 def sender():
     try:
-        dario_speek("yes sir, what should I say?")
-        content = record_audio()
-        to = {'awonkhrais@gmail.com','x.firashasan@gmail.com'}
-        send_email(to, content)
+        
+        content = record_audio("yes sir, what should I say?")
+        reciver=record_audio("for who ??")
+        to = {'Sam':'awonkhrais@gmail.com',
+        "Feras":'x.firashasan@gmail.com',
+        "Jack":'ferasezaldeen@gmail.com'}
+        print(to[reciver])
+        send_email(to[reciver], content)
         dario_speek("Email has been sent sir!")
 
     except Exception as e:
-        print(e)
+        
         dario_speek("Unable to send the email")
 
 def send_email(to, content):
@@ -213,6 +227,7 @@ def get_weather(audio):
     temp = data["data"][0]["high_temp"]
     dario_speek(f" the temperature in {city_name} is {temp} ")
 
+
 def on_start():
    global running
    running = True
@@ -229,7 +244,7 @@ def on_stop():
 def open_window():
     global root
     feature_window = Toplevel(root)
-    feature_window.iconbitmap('../icon.ico')
+    # feature_window.iconbitmap('../icon.ico')
 
     feature_window.title("Dario features")
     feature_window.geometry("550x300")
@@ -243,7 +258,7 @@ def open_window():
     Lb.insert(6, "6. Search Feature")
     Lb.insert(7, "7. Play Music Feature")
     Lb.insert(8, "8. Python Feature")
-    Lb.insert(9, "9. Wikipedia Feature")
+    Lb.insert(9, "9. Joke Feature")
     Lb.insert(10, "10. Exit, Stop Feature")
     Lb.pack()
     feature_window.mainloop()
@@ -255,7 +270,7 @@ def gui():
     canvas.grid(columnspan=3)
 
 
-    logo = Image.open('../voice_ui_logo.jpg')
+    logo = Image.open('./voice_ui_logo.jpg')
     logo = ImageTk.PhotoImage(logo)
     logo_label = tk.Label(image = logo)
     logo_label.image = logo
