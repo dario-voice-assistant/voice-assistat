@@ -254,8 +254,6 @@ def gui():
     canvas = tk.Canvas(root, width=600, height=400)
     canvas.grid(columnspan=3)
 
-    # logo
-    root.iconbitmap('../icon.ico')
 
     logo = Image.open('../voice_ui_logo.jpg')
     logo = ImageTk.PhotoImage(logo)
