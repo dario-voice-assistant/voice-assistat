@@ -19,6 +19,7 @@ root = tk.Tk()
 r = sr.Recognizer()
 
 test=pyttsx3.init()
+
 def dario_speek(audio):
     test.say(audio)
     test.runAndWait()
@@ -134,9 +135,10 @@ def respond():
         sender()
         root.after(1000, respond)
 
-    if ('stop' or 'exit' or 'sleep' or 'goodbye') in audio:
+    if ('stop' or 'exit' or 'sleep' or 'goodbye' or 'no') in audio:
         dario_speek('nice to meet you')
         exit()
+
     if ('date' or 'what is the date') in audio:
         get_date()
         root.after(1000, respond)
@@ -224,6 +226,7 @@ def get_weather(audio):
     data = responses.json()
     temp = data["data"][0]["high_temp"]
     dario_speek(f" the temperature in {city_name} is {temp} ")
+
 
 def on_start():
    global running
