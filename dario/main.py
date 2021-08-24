@@ -5,23 +5,15 @@ import pyttsx3
 import datetime
 import smtplib
 import requests
+import urllib.request
+import re
 import os
+import wikipedia
 import tkinter as tk
 from tkinter import *
 from PIL import Image,ImageTk
+
 root = tk.Tk()
-canvas = tk.Canvas(root,width = 600 , height = 400)
-canvas.grid(columnspan = 3)
-
-#logo
-root.iconbitmap('../logo.ico')
-
-logo = Image.open('../mic.gif')
-logo = ImageTk.PhotoImage(logo)
-logo_label = tk.Label(image = logo)
-logo_label.image = logo
-logo_label.grid(column=1,row=0)
-root.title('Dario Voice Assistant ')
 
 r = sr.Recognizer()
 
@@ -36,6 +28,14 @@ def search():
     url = f'https://google.com/search?q={search}'
     webbrowser.get().open(url)
     dario_speek(f'this is what I found about {search}')
+
+def search_youtube():
+    search=record_audio(('what do you want to search'))
+    search_new = search.replace(' ', '+')
+    html = urllib.request.urlopen(f"https://www.youtube.com/results?search_query={search_new}")
+    video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
+    webbrowser.get().open("https://www.youtube.com/watch?v=" + video_ids[0])
+
 
 def location():
     location = record_audio('what is the location that you want e to search for ??')
@@ -70,20 +70,23 @@ def python():
         webbrowser.get().open(url)
 
 
+counter = 0
 
 def start():
-   
-    hour = datetime.datetime.now().hour
-    if hour >= 6 and hour < 12:
-        dario_speek("Good morning sir")
-    elif hour >= 12 and hour < 18:
-        dario_speek("Good afternoon sir")
-    elif hour >= 18 and hour < 24:
-        dario_speek("Good evening sir")
-    else:
-        dario_speek("Good night sir")
+    global counter
+    if counter == 0 :
+        hour = datetime.datetime.now().hour
+        if hour >= 6 and hour < 12:
+            dario_speek("Good morning sir")
+        elif hour >= 12 and hour < 18:
+            dario_speek("Good afternoon sir")
+        elif hour >= 18 and hour < 24:
+            dario_speek("Good evening sir")
+        else:
+            dario_speek("Good night sir")
 
-    dario_speek("Dario at your service please tell me how can I help you?")
+        dario_speek("Dario at your service please tell me how can I help you?")
+    counter +=1
     root.after(1000, respond)
 
 
@@ -111,34 +114,60 @@ def respond():
 
     if ('what is your name' or 'name') in audio:
         dario_speek('my name is dario')
-    if 'search' in audio:
+        root.after(1000, respond)
+
+    if 'google' in audio:
         search()
+        root.after(1000, respond)
+
     if ('send email' or 'email') in audio:
         sender()
-    if ('stop' or 'exit' or 'sleep' or 'exit' or 'goodbye') in audio:
+        root.after(1000, respond)
+
+    if ('stop' or 'exit' or 'sleep' or 'goodbye') in audio:
         dario_speek('nice to meet you')
         exit()
     if ('date' or 'what is the date') in audio:
         get_date()
+        root.after(1000, respond)
+
     if ('time' or 'what is the time') in audio:
         get_time()
+        root.after(1000, respond)
+
     if 'location' in audio:
         location()
+        root.after(1000, respond)
+
     if 'weather' in audio:
         get_weather(audio)
+        root.after(1000, respond)
+
     if 'python' in audio:
         python()
-    if "play music" in voice_data:
-        song_path = 'D:\\Music'
-        songs = os.listdir(song_path)
-        os.startfile(os.path.join(song_path, songs[0]))
+        root.after(1000, respond)
 
- 
+    if "play music" in audio:
+        search_youtube()
+        root.after(1000, respond)
+
+    if 'wikipedia' in audio:
+        wiki(audio)
+        root.after(1000, respond)
+
+
+def wiki(audio):
+    dario_speek('Searching...')
+    audio = audio.replace('wikipedia', '')
+    result = wikipedia.summary(audio, sentences=2)
+    print(result)
+    dario_speek(result)
+
 def sender():
     try:
         dario_speek("yes sir, what should I say?")
         content = record_audio()
-        to = {'awonkhrais@gmail.com'}
+        to = {'awonkhrais@gmail.com','x.firashasan@gmail.com'}
         send_email(to, content)
         dario_speek("Email has been sent sir!")
 
@@ -178,7 +207,6 @@ def get_weather(audio):
     temp = record_audio("what is the city name")
     city_name = temp.lower()
     api_key = "39577f16323c466893c05341fcc378c6"
-    # temp_url = f"https://api.weatherbit.io/v2.0/forecast/daily?city=amman&key={api_key}"
     temp_url = f"https://api.weatherbit.io/v2.0/forecast/daily?city={city_name}&key={api_key}"
     responses = requests.get(temp_url)
     data = responses.json()
@@ -188,50 +216,73 @@ def get_weather(audio):
 def on_start():
    global running
    running = True
-
+#
 def on_stop():
     dario_speek("Good Bye sir! nice to meet you")
     global running
     running = False
-    root.destroy()
+    exit()
+    # root.destroy()
+
 
 
 def open_window():
+    global root
     feature_window = Toplevel(root)
+    feature_window.iconbitmap('../icon.ico')
+
     feature_window.title("Dario features")
     feature_window.geometry("550x300")
-    Label(feature_window,text="Dario is here to help you, he can do many services:", height = 3,  width = 500, font = "Raleway" , bg = '#724bf2').pack(pady = 10)
-    Lb = Listbox(feature_window ,height = 200,width = 500,  bg = '#724bf2', font = "Raleway" )
-    Lb.insert(1, "1.")
-    Lb.insert(2, "2.")
-    Lb.insert(3, "3.")
-    Lb.insert(4, "4.")
-    Lb.insert(5, "5.")
-    Lb.insert(6, "6.")
-    Lb.insert(7, "7.")
+    Label(feature_window,text="Dario is here to help you with the following services:", height = 3,  width = 500, font = "Raleway" , bg = '#282828',fg= '#429fca').pack(pady = 10)
+    Lb = Listbox(feature_window ,height = 200,width = 500,  bg = '#282828', font = "Raleway",fg='#429fca')
+    Lb.insert(1, "1. Time Feature")
+    Lb.insert(2, "2. Date Feature")
+    Lb.insert(3, "3. Weather Feature")
+    Lb.insert(4, "4. Location Feature")
+    Lb.insert(5, "5. Send Email Feature")
+    Lb.insert(6, "6. Search Feature")
+    Lb.insert(7, "7. Play Music Feature")
+    Lb.insert(8, "8. Python Feature")
+    Lb.insert(9, "9. Wikipedia Feature")
+    Lb.insert(10, "10. Exit, Stop Feature")
     Lb.pack()
     feature_window.mainloop()
 
 
 
-start_talk = tk.Button(height=1, width=10, text="Let's Talk ", command=start, bg='#724bf2', fg='white')
-start_talk.config(font=("Raleway", 12))
-start_talk.place(x=350, y=520)
+def gui():
+    canvas = tk.Canvas(root, width=600, height=400)
+    canvas.grid(columnspan=3)
+
+    # logo
+    root.iconbitmap('../icon.ico')
+
+    logo = Image.open('../voice_ui_logo.jpg')
+    logo = ImageTk.PhotoImage(logo)
+    logo_label = tk.Label(image = logo)
+    logo_label.image = logo
+    logo_label.grid(column=1,row=0)
+    root.title('Dario Voice Assistant ')
 
 
-my_features = tk.Button(height=1, width=11, text="My Features ", command=open_window, bg='#724bf2', fg='white')
-my_features.config(font=("Raleway", 12))
-my_features.place(x=550, y=520)
-
-good_bye = tk.Button(height=1, width=10, text="Good Bye", command=on_stop, bg='#724bf2', fg='white')
-good_bye.config(font=("Raleway", 12))
-good_bye.place(x=150, y=520)
+    start_talk = tk.Button(height=1, width=10, text="Let's Talk ", command=start, bg='#429fca', fg='white')
+    start_talk.config(font=("Raleway", 12))
+    start_talk.place(x=350, y=520)
 
 
+    my_features = tk.Button(height=1, width=11, text="My Features ", command=open_window, bg='#429fca', fg='white')
+    my_features.config(font=("Raleway", 12))
+    my_features.place(x=500, y=520)
+    #c61a80
+
+    good_bye = tk.Button(height=1, width=10, text="Good Bye", command=on_stop, bg='#429fca', fg='white')
+    good_bye.config(font=("Raleway", 12))
+    good_bye.place(x=200, y=520)
 
 
-root.mainloop()
+    root.mainloop()
 
+gui()
 
 # start()
 # while True:
