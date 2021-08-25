@@ -32,7 +32,7 @@ def search():
     dario_speek(f'this is what I found about {search}')
 
 def search_youtube():
-    search=record_audio(('what do you want to search'))
+    search=record_audio(('what do you want me to play'))
     search_new = search.replace(' ', '+')
     html = urllib.request.urlopen(f"https://www.youtube.com/results?search_query={search_new}")
     video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
@@ -90,8 +90,10 @@ def start():
         dario_speek("Dario at your service please tell me how can I help you?")
   
     counter +=1
-    
-    root.after(1000, respond)
+    respond()
+    # root.after(1000, respond)
+
+
 recording=False
 def start_record():
     global recording 
@@ -135,11 +137,13 @@ def respond():
 
     if 'search' in audio:
         search()
-        root.after(1000, respond)
+        # root.after(1000, respond)
+        trying=0
 
     if ('send' or 'email') in audio:
         sender()
-        root.after(1000, respond)
+        # root.after(1000, respond)
+        trying=0
 
     if ('stop' or 'exit' or 'sleep' or 'goodbye' or 'no') in audio:
 
@@ -156,7 +160,8 @@ def respond():
 
     if 'location' in audio:
         location()
-        root.after(1000, respond)
+        # root.after(1000, respond)
+        trying=0
 
     if 'weather' in audio:
         get_weather(audio)
@@ -164,11 +169,13 @@ def respond():
 
     if ('python'or'advise') in audio:
         python()
-        root.after(1000, respond)
+        # root.after(1000, respond)
+        trying=0
 
     if "play music" in audio:
         search_youtube()
-        root.after(1000, respond)
+        # root.after(1000, respond)
+        trying=0
 
     if 'joke' in audio:
         joke()
@@ -186,7 +193,7 @@ def sender():
         content = record_audio("yes sir, what should I say?")
         reciver=record_audio("for who ??")
         to = {'Sam':'awonkhrais@gmail.com',
-        "Feras":'x.firashasan@gmail.com',
+        "Feras":'ferasezaldeen@gmail.com',
         "Jack":'ferasezaldeen@gmail.com'}
         print(to[reciver])
         send_email(to[reciver], content)
