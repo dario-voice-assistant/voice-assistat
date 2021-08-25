@@ -91,7 +91,13 @@ def start():
     counter +=1
     
     root.after(1000, respond)
-
+recording=False
+def start_record():
+    global recording 
+    recording=True
+    s=am.Record(4)
+    recording=False
+    return s
 
 
 def record_audio(ask=False):
@@ -134,7 +140,7 @@ def respond():
         sender()
         root.after(1000, respond)
 
-    if ('stop' or 'exit' or 'sleep' or 'goodbye') in audio:
+    if ('stop' or 'exit' or 'sleep' or 'goodbye'or 'no') in audio:
         dario_speek('nice to meet you')
         exit()
     if ('date' or 'what is the date') in audio:
