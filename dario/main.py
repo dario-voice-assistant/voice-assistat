@@ -40,7 +40,7 @@ def search_youtube():
 
 
 def location():
-    location = record_audio('what is the location that you want e to search for ??')
+    location = record_audio('what is the location you are looking for??')
     url = f'https://google.nl/maps/place/{location}/&amp;'
     webbrowser.get().open(url)
 
@@ -79,13 +79,13 @@ def start():
     if counter == 0 :
         hour = datetime.datetime.now().hour
         if hour >= 6 and hour < 12:
-            dario_speek("Good morning sir")
+            dario_speek("Good morning")
         elif hour >= 12 and hour < 18:
-            dario_speek("Good afternoon sir")
+            dario_speek("Good afternoon")
         elif hour >= 18 and hour < 24:
-            dario_speek("Good evening sir")
+            dario_speek("Good evening")
         else:
-            dario_speek("Good night sir")
+            dario_speek("Good night")
 
         dario_speek("Dario at your service please tell me how can I help you?")
   
@@ -145,9 +145,9 @@ def respond():
         # root.after(1000, respond)
         trying=0
 
-    if ('stop' or 'exit' or 'sleep' or 'goodbye' or 'no') in audio:
+    if ('stop' or 'exit' or 'sleep' or 'goodbye' or 'no' or 'bye' or 'quit' or 'finish') in audio:
 
-        dario_speek('nice to meet you')
+        dario_speek('nice to talk to you, later then')
         exit()
 
     if ('date' or 'what is the date') in audio:
@@ -163,7 +163,7 @@ def respond():
         # root.after(1000, respond)
         trying=0
 
-    if 'weather' in audio:
+    if ('weather' or 'temperature') in audio:
         get_weather(audio)
         root.after(1000, respond)
 
@@ -172,7 +172,7 @@ def respond():
         # root.after(1000, respond)
         trying=0
 
-    if "play music" in audio:
+    if ("play music" or "play song") in audio:
         search_youtube()
         # root.after(1000, respond)
         trying=0
@@ -190,14 +190,15 @@ def joke():
 def sender():
     try:
         
-        content = record_audio("yes sir, what should I say?")
-        reciver=record_audio("for who ??")
+        content = record_audio("Sure, what should I say?")
+        reciver=record_audio("who do you want me to send the email to ??")
         to = {'Sam':'awonkhrais@gmail.com',
         "Feras":'ferasezaldeen@gmail.com',
-        "Jack":'ferasezaldeen@gmail.com'}
+        "Jack":'ferasezaldeen@gmail.com',
+        "walker":'x.firashasan@gmail.com'}
         print(to[reciver])
         send_email(to[reciver], content)
-        dario_speek("Email has been sent sir!")
+        dario_speek("Email has been sent successfully!")
 
     except Exception as e:
         
@@ -247,7 +248,7 @@ def on_start():
    running = True
 #
 def on_stop():
-    dario_speek("Good Bye sir! nice to meet you")
+    dario_speek("Good Bye! nice to meet you")
     global running
     running = False
     exit()
