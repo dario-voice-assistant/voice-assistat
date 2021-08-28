@@ -1,3 +1,4 @@
+from audiomath.Base import DecodeTimecodeString
 import speech_recognition as sr
 import audiomath as am
 import webbrowser
@@ -19,29 +20,40 @@ root = tk.Tk()
 r = sr.Recognizer()
 
 test=pyttsx3.init()
-def dario_speek(audio):
+def dario_speek(audio,tests=False):
+    if tests:
+        return True
+        
     test.say(audio)
     test.runAndWait()
 
+    
 
-def search():
-    search=record_audio('what do you want to search for')
+
+def search(test=False):
+
+   
+    search=record_audio('what do you want to search for',test)
     url = f'https://google.com/search?q={search}'
     webbrowser.get().open(url)
-    dario_speek(f'this is what I found about {search}')
+    dario_speek(f'this is what I found about {search}',test)
+    check=True
+    return check
 
-def search_youtube():
-    search=record_audio(('what do you want me to play'))
+def search_youtube(test=False):
+    search=record_audio('what do you want me to play',test)
     search_new = search.replace(' ', '+')
     html = urllib.request.urlopen(f"https://www.youtube.com/results?search_query={search_new}")
     video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
     webbrowser.get().open("https://www.youtube.com/watch?v=" + video_ids[0])
+    return True
 
 
-def location():
-    location = record_audio('what is the location that you want e to search for ??')
+def location(test=False):
+    location = record_audio('what is the location that you want e to search for ??',test)
     url = f'https://google.nl/maps/place/{location}/&amp;'
     webbrowser.get().open(url)
+    return True
 
 def python():
     temp=record_audio('what would you want me to search for')
@@ -78,13 +90,13 @@ def start():
     if counter == 0 :
         hour = datetime.datetime.now().hour
         if hour >= 6 and hour < 12:
-            dario_speek("Good morning sir")
+            dario_speek("Good morning ")
         elif hour >= 12 and hour < 18:
-            dario_speek("Good afternoon sir")
+            dario_speek("Good afternoon ")
         elif hour >= 18 and hour < 24:
-            dario_speek("Good evening sir")
+            dario_speek("Good evening ")
         else:
-            dario_speek("Good night sir")
+            dario_speek("Good night ")
 
         dario_speek("Dario at your service please tell me how can I help you?")
   
@@ -102,7 +114,9 @@ def start_record():
     return s
 
 
-def record_audio(ask=False):
+def record_audio(ask=False,test=False):
+    if test:
+        return 'test'
     if ask:
         dario_speek(ask)  
     s=am.Record(4)
@@ -145,7 +159,7 @@ def respond():
         trying=0
 
     if ('stop' or 'exit' or 'sleep' or 'goodbye'or 'no') in audio:
-        dario_speek('nice to meet you')
+        dario_speek('see you next time')
         exit()
     if ('date' or 'what is the date') in audio:
         get_date()
@@ -160,11 +174,11 @@ def respond():
         # root.after(1000, respond)
         trying=0
 
-    if 'weather' in audio:
+    if ('weather'or 'condition' or 'hi') in audio:
         get_weather(audio)
         root.after(1000, respond)
 
-    if ('python'or'advise') in audio:
+    if ('python'or'advise'or 'advice') in audio:
         python()
         # root.after(1000, respond)
         trying=0
@@ -179,10 +193,11 @@ def respond():
         root.after(1000, respond)
 
 
-def joke():
+def joke(test=False):
     joke1=pyjokes.get_joke(language='en', category= 'all')
-    dario_speek(joke1)
-    dario_speek('ha ha ha ha ha ha ha ha ha ')
+    dario_speek(joke1,test)
+    dario_speek('ha ha ha ha ha ha ha ha ha ',test)
+    return True
 
 def sender():
     try:
@@ -210,22 +225,24 @@ def send_email(to, content):
     email_server.sendmail(gmail_user,to,content)
     email_server.quit()
 
-def get_date():
+def get_date(test=False):
     year = int(datetime.datetime.now().year)
     month_num = str(datetime.datetime.now().month)
     datetime_object = datetime.datetime.strptime(month_num, "%m")
     full_month_name = datetime_object.strftime("%B")
     day = int(datetime.datetime.now().day)
-    dario_speek("The current date is")
-    dario_speek(day)
-    dario_speek(full_month_name)
-    dario_speek(year)
+    dario_speek("The current date is",test)
+    dario_speek(day,test)
+    dario_speek(full_month_name,test)
+    dario_speek(year,test)
+    return True
 
-def get_time():
+def get_time(test=False):
     now = datetime.datetime.now()
     current_time= now.strftime("%I:%M %p")
-    dario_speek('The current time is')
-    dario_speek(current_time)
+    dario_speek('The current time is',test)
+    dario_speek(current_time,test)
+    return True
 
 def get_weather(audio):
 
@@ -237,6 +254,7 @@ def get_weather(audio):
     data = responses.json()
     temp = data["data"][0]["high_temp"]
     dario_speek(f" the temperature in {city_name} is {temp} ")
+    
 
 def on_start():
    global running
