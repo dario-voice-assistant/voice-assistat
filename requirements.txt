@@ -1,0 +1,24 @@
+In order for the user to be able to use this project:
+ - Make sure to have these packages installed:
+        - speechrecognition
+        - audiomath
+        - pyttsx3
+        - datetime
+        - requests
+        - pyjokes
+        - tk
+        - secure-smtplib
+        - regex
+        - os-sys
+        - pillow
+ - Type python -m dario.main and in the command line and press enter to open the app.
+ - Then Press on the second button "let's talk" to be able to talk to the voice assistant.
+ - Options:
+ 1. Say "time" and the assistant will tell you the time.
+ 2. Say "weather" and the assistant will tell you what the tempareture is in a specific city
+ 3. Say "send email" and the assistant will help you send emails
+ 4. Say "play music" and the assistant will open the desired song you asked it to play.
+ 5. Say "joke" and the assistant will tell you a joke and then laugh at it.
+ 6. Say "search" and then the assistant will ask what would you like to search for.
+ 7. You can also say "name" and the assistant will tell you its name.
+ 8. Say "stop" or "exit" when you finish.

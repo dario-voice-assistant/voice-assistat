@@ -1,6 +1,6 @@
 
 
-[user stories](user_story.md)
+[User stories](user_story.md)
 
 
 ## Dario voice assistant
@@ -23,6 +23,8 @@ Stretch Goals:
 - Open applications
 - Set alarm
 - Play music
+[To use the project](requirements.txt)
+
 
 # WireFrame
 
@@ -36,7 +38,12 @@ Stretch Goals:
 
 [trello](https://trello.com/b/BkLfXBc2/dario-voice-assistant)
 
+
+
+
+
 # To be able to use Dario Voice Assistant
+
 
 1. Clone the repository and go to the directory.
 2. Install the packages.
