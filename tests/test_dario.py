@@ -9,20 +9,16 @@ def test_version():
 
 
 def test_search():
-    assert search(test)==True
+    assert search(test)=='https://google.com/search?q=test'
 
 def test_youtube():
-    assert search_youtube(test)==True
+    assert search_youtube(test)=="https://www.youtube.com/results?search_query=test"
 
 def test_location():
-    assert location(test)==True
+    assert location(test)=='https://google.nl/maps/place/test/&amp;'
 
-def test_Jokes():
-    assert joke(test)==True
+def test_weather(): 
+    assert get_weather(test)=="https://api.weatherbit.io/v2.0/forecast/daily?city=test&key=39577f16323c466893c05341fcc378c6"
 
-def test_date():
-    assert get_date(test)==True
 
-def test_time():
-    assert get_time(test)==True
 
