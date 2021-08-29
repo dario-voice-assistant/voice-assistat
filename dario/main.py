@@ -21,6 +21,11 @@ r = sr.Recognizer()
 
 test=pyttsx3.init()
 def dario_speek(audio,tests=False):
+
+    """
+    Dario speak is the function make the assistant talk to the user and convert the text to audio.
+    """
+
     if tests:
         return True
         
@@ -32,7 +37,10 @@ def dario_speek(audio,tests=False):
 
 def search(test=False):
 
-   
+    """
+    it is the function to search on google, when user ask for serach about something.
+    """
+
     search=record_audio('what do you want to search for',test)
     url = f'https://google.com/search?q={search}'
     webbrowser.get().open(url)
@@ -41,6 +49,11 @@ def search(test=False):
     return check
 
 def search_youtube(test=False):
+
+    """
+    it is the function to search on youtube, when user ask for play music.
+    """
+
     search=record_audio('what do you want me to play',test)
     search_new = search.replace(' ', '+')
     html = urllib.request.urlopen(f"https://www.youtube.com/results?search_query={search_new}")
@@ -50,12 +63,22 @@ def search_youtube(test=False):
 
 
 def location(test=False):
+
+    """
+    it is the function to apper the locations on maps, when user ask for location.
+    """
+
     location = record_audio('what is the location that you want e to search for ??',test)
     url = f'https://google.nl/maps/place/{location}/&amp;'
     webbrowser.get().open(url)
     return True
 
 def python():
+
+    """
+    it is the function to search about python topics, when user ask for python topics.
+    """
+
     temp=record_audio('what would you want me to search for')
     if ('for'or 'loops')in temp:
         url='https://www.w3schools.com/python/python_for_loops.asp'
@@ -86,6 +109,11 @@ def python():
 counter = 0
 
 def start():
+
+    """
+    it is the function to start the whole app.
+    """
+
     global counter
     if counter == 0 :
         hour = datetime.datetime.now().hour
@@ -107,6 +135,11 @@ def start():
 
 recording=False
 def start_record():
+
+    """
+    it is the function to start record when user talk to the assistant.
+    """
+
     global recording 
     recording=True
     s=am.Record(4)
@@ -115,6 +148,11 @@ def start_record():
 
 
 def record_audio(ask=False,test=False):
+
+    """
+    It is the function convert the audio to text.
+    """
+
     if test:
         return 'test'
     if ask:
@@ -138,6 +176,11 @@ def record_audio(ask=False,test=False):
 trying=0
 
 def respond():
+
+    """
+    It is the function take users command and act upon it.
+    """
+
     global trying
     if trying>0:
         dario_speek('anything else')
@@ -194,12 +237,22 @@ def respond():
 
 
 def joke(test=False):
+
+    """
+    It is the function tell the user a jokes when user ask for a joke.
+    """
+
     joke1=pyjokes.get_joke(language='en', category= 'all')
     dario_speek(joke1,test)
     dario_speek('ha ha ha ha ha ha ha ha ha ',test)
     return True
 
 def sender():
+
+    """
+    It is the function that save the contet email message and the reciver.
+    """
+
     try:
         
         content = record_audio("yes sir, what should I say?")
@@ -216,6 +269,11 @@ def sender():
         dario_speek("Unable to send the email")
 
 def send_email(to, content):
+
+    """
+    It is the function that send the emails for the user.
+    """
+
     email_server = smtplib.SMTP('smtp.gmail.com',587)
     email_server.ehlo()
     email_server.starttls()
@@ -226,6 +284,11 @@ def send_email(to, content):
     email_server.quit()
 
 def get_date(test=False):
+
+    """
+    It is the function tell the user the date when user ask about the date.
+    """
+
     year = int(datetime.datetime.now().year)
     month_num = str(datetime.datetime.now().month)
     datetime_object = datetime.datetime.strptime(month_num, "%m")
@@ -238,6 +301,11 @@ def get_date(test=False):
     return True
 
 def get_time(test=False):
+
+    """
+    It is the function tell the user the time when user ask about the time.
+    """
+
     now = datetime.datetime.now()
     current_time= now.strftime("%I:%M %p")
     dario_speek('The current time is',test)
@@ -245,6 +313,10 @@ def get_time(test=False):
     return True
 
 def get_weather(audio):
+
+    """
+    It is the function tell the user the weather when user ask about the weather.
+    """
 
     temp = record_audio("what is the city name")
     city_name = temp.lower()
@@ -257,10 +329,16 @@ def get_weather(audio):
     
 
 def on_start():
+
    global running
    running = True
 #
 def on_stop():
+
+    """
+    It is the function that cloce the app.
+    """
+
     dario_speek("Good Bye sir! nice to meet you")
     global running
     running = False
@@ -270,6 +348,11 @@ def on_stop():
 
 
 def open_window():
+
+    """
+    It is the function that open the features window.
+    """
+
     global root
     feature_window = Toplevel(root)
     # feature_window.iconbitmap('../icon.ico')
@@ -294,6 +377,18 @@ def open_window():
 
 
 def gui():
+
+    """
+    It is the function that appear the Interface for the users we have inside it 3 buttons :
+
+    1- Features button : It is the button show the app features in exterior window when user click on it.
+
+    2- Let's talk button : It is the button that starts the most of app functionality when the user click on it can talk with the assistant
+    and ask for the features he's want to ask about it and the assistant will give the user what he was asking about.
+
+    3- Goodbye button : It is the button close the app when user finish.
+    """
+
     canvas = tk.Canvas(root, width=600, height=400)
     canvas.grid(columnspan=3)
 
