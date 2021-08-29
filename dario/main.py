@@ -323,7 +323,10 @@ def gui():
 
     root.mainloop()
 
-gui()
+
+if __name__ == '__main__':
+    gui()
+
 
 # start()
 # while True:
