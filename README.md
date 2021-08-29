@@ -1,5 +1,5 @@
 
-
+## User Stories : 
 [User stories](user_story.md)
 
 
@@ -23,6 +23,8 @@ Stretch Goals:
 - Open applications
 - Set alarm
 - Play music
+
+## How to use the project : 
 [To use the project](requirements.txt)
 
 

@@ -46,7 +46,7 @@ def search(test=False):
     webbrowser.get().open(url)
     dario_speek(f'this is what I found about {search}',test)
     check=True
-    return check
+    return url
 
 def search_youtube(test=False):
 
@@ -59,7 +59,7 @@ def search_youtube(test=False):
     html = urllib.request.urlopen(f"https://www.youtube.com/results?search_query={search_new}")
     video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
     webbrowser.get().open("https://www.youtube.com/watch?v=" + video_ids[0])
-    return True
+    return (f"https://www.youtube.com/results?search_query={search_new}")
 
 
 def location(test=False):
@@ -71,7 +71,7 @@ def location(test=False):
     location = record_audio('what is the location that you want e to search for ??',test)
     url = f'https://google.nl/maps/place/{location}/&amp;'
     webbrowser.get().open(url)
-    return True
+    return url
 
 def python():
 
@@ -312,20 +312,21 @@ def get_time(test=False):
     dario_speek(current_time,test)
     return True
 
-def get_weather(audio):
+def get_weather(test = False):
 
     """
     It is the function tell the user the weather when user ask about the weather.
     """
 
-    temp = record_audio("what is the city name")
+    temp = record_audio("what is the city name", test)
     city_name = temp.lower()
     api_key = "39577f16323c466893c05341fcc378c6"
     temp_url = f"https://api.weatherbit.io/v2.0/forecast/daily?city={city_name}&key={api_key}"
     responses = requests.get(temp_url)
     data = responses.json()
     temp = data["data"][0]["high_temp"]
-    dario_speek(f" the temperature in {city_name} is {temp} ")
+    dario_speek(f" the temperature in {city_name} is {temp} ", test)
+    return temp_url
     
 
 def on_start():
